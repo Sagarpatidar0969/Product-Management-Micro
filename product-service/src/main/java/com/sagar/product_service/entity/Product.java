@@ -5,6 +5,11 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 @Getter
@@ -21,16 +26,9 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 1000)
-    private String description;
-
     @Column(nullable = false)
     private BigDecimal price;
 
     @Column(nullable = false)
-    private Integer quantity;
-
-    private String category;
-
-    private Boolean active;
+    private Integer stock;
 }

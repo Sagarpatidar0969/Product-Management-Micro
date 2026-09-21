@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(java *)",
+      "Bash(dir *)",
+      "Bash(set *)",
+      "Bash(mvn *)"
+    ]
+  },
+  "$version": 4
+}

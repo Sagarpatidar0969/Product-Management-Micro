@@ -1,5 +1,6 @@
 package com.sagar.user_service.service;
 
+
 import com.sagar.user_service.dto.UserDto;
 import com.sagar.user_service.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,6 @@ public interface UserService {
 
     void delete(Long id);
 
-    User save(UserDto dto, MultipartFile image) throws IOException;
-
+   // User save(UserDto dto, MultipartFile image) throws IOException;
 
 }

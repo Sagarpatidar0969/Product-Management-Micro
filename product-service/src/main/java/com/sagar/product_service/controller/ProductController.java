@@ -2,6 +2,7 @@ package com.sagar.product_service.controller;
 
 import com.sagar.product_service.dto.ProductRequest;
 import com.sagar.product_service.dto.ProductResponse;
+import com.sagar.product_service.entity.Product;
 import com.sagar.product_service.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,41 +19,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
-    }
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
+    public Product getProduct(@PathVariable Long id) {
 
-        return ResponseEntity.ok(productService.getProductById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
-
-        return ResponseEntity.ok(productService.getAllProducts());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
-
-        return ResponseEntity.ok(productService.updateProduct(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-
-        productService.deleteProduct(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<ProductResponse>> getByCategory(@PathVariable String category) {
-
-        return ResponseEntity.ok(productService.getProductsByCategory(category));
+        return productService.getProduct(id);
     }
 }

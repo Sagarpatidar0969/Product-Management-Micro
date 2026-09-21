@@ -16,87 +16,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    @Override
-    public ProductResponse createProduct(ProductRequest request) {
 
-        Product product = Product.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .quantity(request.getQuantity())
-                .category(request.getCategory())
-                .active(true)
-                .build();
+    public Product getProduct(Long productId) {
 
-        Product savedProduct = productRepository.save(product);
-
-        return mapToResponse(savedProduct);
-    }
-
-    @Override
-    public ProductResponse getProductById(Long id) {
-
-        Product product = productRepository.findById(id)
+        return productRepository.findById(productId)
                 .orElseThrow(() ->
-                        new RuntimeException("Product not found with id: " + id));
-
-        return mapToResponse(product);
-    }
-
-    @Override
-    public List<ProductResponse> getAllProducts() {
-
-        return productRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
-    }
-
-    @Override
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
-
-        Product product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Product not found with id: " + id));
-
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setQuantity(request.getQuantity());
-        product.setCategory(request.getCategory());
-
-        return mapToResponse(productRepository.save(product));
-    }
-
-    @Override
-    public void deleteProduct(Long id) {
-
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
-
-        productRepository.deleteById(id);
-    }
-
-    @Override
-    public List<ProductResponse> getProductsByCategory(String category) {
-
-        return productRepository.findByCategory(category)
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
-    }
-
-    private ProductResponse mapToResponse(Product product) {
-
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
-                .category(product.getCategory())
-                .active(product.getActive())
-                .build();
+                        new RuntimeException("Product not found: " + productId));
     }
 }

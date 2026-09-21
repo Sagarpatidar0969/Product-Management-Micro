@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sagar.user_service.dto.UserDto;
 import com.sagar.user_service.entity.User;
 import com.sagar.user_service.repository.UserRepository;
+import com.sagar.user_service.service.OrderIntegrationService;
 import com.sagar.user_service.service.UserService;
-import com.sagar.user_service.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +22,7 @@ public class UserController {
 
     private final UserService service;
     private final UserRepository repository;
+    private final OrderIntegrationService orderIntegrationService;
 
     @PostMapping
     public User save(@RequestBody User user){
@@ -42,14 +43,16 @@ public class UserController {
     public void delete(@PathVariable Long id){
         service.delete(id);
     }
-    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<User> saveUser(
-            @RequestPart("user") String user,
-            @RequestPart("image") MultipartFile image) throws IOException {
+//    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<User> saveUser(
+//            @RequestPart("user") String user,
+//            @RequestPart("image") MultipartFile image) throws IOException {
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        UserDto userDto = mapper.readValue(user, UserDto.class);
+//
+//        return ResponseEntity.ok(service.save(userDto, image));
+//    }
 
-        ObjectMapper mapper = new ObjectMapper();
-        UserDto userDto = mapper.readValue(user, UserDto.class);
 
-        return ResponseEntity.ok(service.save(userDto, image));
-    }
 }

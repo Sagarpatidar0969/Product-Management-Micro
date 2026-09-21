@@ -1,9 +1,6 @@
 package com.sagar.user_service.controller;
 
-
-import com.sagar.user_service.dto.LoginRequest;
-import com.sagar.user_service.dto.LoginResponse;
-import com.sagar.user_service.dto.RegisterRequest;
+import com.sagar.user_service.dto.*;
 import com.sagar.user_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +26,17 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(
             @RequestBody LoginRequest request) {
 
-        String token = authService.login(request);
+        return ResponseEntity.ok(
+                authService.login(request)
+        );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refresh(
+            @RequestBody RefreshTokenRequest request) {
 
         return ResponseEntity.ok(
-                new LoginResponse(token)
+                authService.refreshToken(request)
         );
     }
 }
