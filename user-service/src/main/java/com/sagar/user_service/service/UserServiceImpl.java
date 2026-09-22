@@ -8,17 +8,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+
+    private final EmailService emailService;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
 
         // Save user in MySQL
-        User savedUser = repository.save(user);
+        User savedUser = userRepository.save(user);
 
         // Save user in Redis
         redisTemplate.opsForValue()
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
         // 2. If Redis does not contain data
         System.out.println("User fetched from MySQL");
 
-        User user = repository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
 
-        return repository.findAll();
+        return userRepository.findAll();
     }
 
 
@@ -102,7 +101,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
 
         // Delete from MySQL
-        repository.deleteById(id);
+        userRepository.deleteById(id);
 
         // Delete from Redis
         redisTemplate.delete(USER_KEY + id);
@@ -134,4 +133,27 @@ public class UserServiceImpl implements UserService {
 //
 //        return savedUser;
 //    }
+
+    public void sendSaleEmail() {
+
+        List<String> emails =
+                userRepository.findAllUserEmails();
+
+        // For testing: maximum 15 users
+        List<String> recipients =
+                emails.stream().distinct()
+                        .limit(15)
+                        .toList();
+
+        if (recipients.isEmpty()) {
+            throw new RuntimeException(
+                    "No users found"
+            );
+        }
+
+        emailService.sendSaleEmail(
+                recipients,
+                "Big Billion Sale"
+        );
+    }
 }

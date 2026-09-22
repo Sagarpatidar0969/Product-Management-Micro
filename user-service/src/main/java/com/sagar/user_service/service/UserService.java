@@ -18,6 +18,8 @@ public interface UserService {
 
     void delete(Long id);
 
+    void sendSaleEmail();
+
    // User save(UserDto dto, MultipartFile image) throws IOException;
 
 }
